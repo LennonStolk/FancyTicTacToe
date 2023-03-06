@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  justify-content: start;
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    rgb(255, 169, 169) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgb(158, 171, 255) 100%
+  );
+}
+
+.origin {
+  margin-top: 10vh;
+  width: 0px;
+  height: 0px;
+  display: block;
+  position: relative;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  position: absolute;
+  margin: 0;
+  transform: translate(-50%, 0);
+  width: 12vw;
+  height: 12vw;
+  transition: ease-in-out 500ms;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.x-win .cell {
+  outline: 0.35vw solid rgb(101, 109, 164);
+  transition: ease-in-out 500ms;
+}
+
+.o-win .cell {
+  outline: 0.35vw solid rgb(168, 108, 108);
+  transition: ease-in-out 500ms;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 0.35vw solid rgb(100, 100, 100);
+  background-color: rgb(240, 240, 240);
+  width: 4vw;
+  height: 4vw;
+  z-index: -1;
+  transition: ease-in-out 500ms;
+}
+.cell > * {
+  margin-left: -5%;
+  margin-top: -5%;
+}
+.cell:nth-child(1) {
+  border-radius: 4px 0 0 0;
+}
+.cell:nth-child(3) {
+  border-radius: 0 4px 0 0;
+}
+.cell:nth-child(7) {
+  border-radius: 0 0 0 4px;
+}
+.cell:nth-child(9) {
+  border-radius: 0 0 4px 0;
+}
+
+.randomize {
+  margin-top: -7vh;
+}
