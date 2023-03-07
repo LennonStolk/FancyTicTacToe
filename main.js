@@ -8,6 +8,7 @@ class Game {
   boardOrigin;
 
   constructor(startingPlayer) {
+    // Set up a new game state
     this.currentPlayer = startingPlayer;
     this.currentBoard = getEmptyBoard();
     this.optionBoards = getOptionBoards(this.currentBoard, this.currentPlayer);
@@ -31,10 +32,13 @@ class Game {
       if (checkWin(this.currentBoard, "o"))
         mainBoardElement.classList.add("o-win");
     }, 200);
+
+    // If a player has won or has tied, make the main board clickable
+    let hasTied = this.currentBoard.every((cell) => cell != "-");
     let hasWon =
       checkWin(this.currentBoard, "x") || checkWin(this.currentBoard, "o");
-    if (hasWon) {
-      // Also reset the game if the main board is clicked
+    if (hasWon || hasTied) {
+      // Reset the game if the main board is clicked
       mainBoardElement.onclick = () => (game = new Game("x"));
       return;
     }
@@ -82,6 +86,7 @@ class Game {
   }
 
   switchPlayer() {
+    // Toggle the player symbol
     if (this.currentPlayer == "x") {
       this.currentPlayer = "o";
       return;
@@ -93,18 +98,22 @@ class Game {
   }
 }
 
-let game = new Game("x");
-
 function getEmptyBoard() {
+  // Generate a new board with 9 empty cells
   return Array(9).fill("-");
 }
 
 function getOptionBoards(currentBoard, currentPlayer) {
+  // Calculate the different options, based on the current board
   let optionBoards = [];
+
+  // Loop through all of the cells
   currentBoard.forEach((cell, index) => {
     if (cell == "-") {
+      // If one of the cells is "-", then generate a new option board where the "-" is replaced with the current player symbol
       let optionBoard = [...currentBoard];
       optionBoard[index] = currentPlayer;
+      // Add the generated option board to the output collection
       optionBoards.push(optionBoard);
     }
   });
@@ -140,12 +149,15 @@ function renderBoard(boardState, isOption) {
 }
 
 function fadeOutBoard(boardState) {
+  // Find the correct board and do a fade out animation
+
   let id = boardState.join("");
   let board = document.getElementById(id);
   board.style.opacity = 0;
 }
 
 function fadeInBoard(boardState) {
+  // Find the correct board and do a fade in animation
   let id = boardState.join("");
   let board = document.getElementById(id);
   setTimeout(() => {
@@ -154,6 +166,7 @@ function fadeInBoard(boardState) {
 }
 
 function moveBoard(boardState, x, y) {
+  // Find the correct board and move it to a position (Position: absolute)
   let id = boardState.join("");
   let board = document.getElementById(id);
   board.style.left = x + "vw";
@@ -161,13 +174,16 @@ function moveBoard(boardState, x, y) {
 }
 
 function setBoardSize(boardState, size) {
+  // Set the size to a max of 12
   if (size > 12) size = 12;
 
+  // Find the correct board and set it to a size based on the parameters and the view width
   let id = boardState.join("");
   let board = document.getElementById(id);
   board.style.width = size + "vw";
   board.style.height = size + "vw";
 
+  // Also set all the cells to the correct size, which is 1/3 of the board
   let cells = board.childNodes;
 
   cells.forEach((cell) => {
@@ -192,5 +208,9 @@ function checkWin(boardState, player) {
   if (boardState[0] + boardState[4] + boardState[8] == threeRow) return true;
   if (boardState[2] + boardState[4] + boardState[6] == threeRow) return true;
 
+  // If no winning lines are found then return false
   return false;
 }
+
+// This is how the game is started when the page is loaded
+let game = new Game("x");
