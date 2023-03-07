@@ -6,13 +6,15 @@ class Game {
   optionBoards;
   currentPlayer;
   boardOrigin;
+  aiOn;
 
-  constructor(startingPlayer) {
+  constructor(startingPlayer, aiOn) {
     // Set up a new game state
     this.currentPlayer = startingPlayer;
     this.currentBoard = getEmptyBoard();
     this.optionBoards = getOptionBoards(this.currentBoard, this.currentPlayer);
     this.boardOrigin = document.getElementById("origin");
+    this.aiOn = aiOn;
 
     this.render();
   }
@@ -39,7 +41,7 @@ class Game {
       checkWin(this.currentBoard, "x") || checkWin(this.currentBoard, "o");
     if (hasWon || hasTied) {
       // Reset the game if the main board is clicked
-      mainBoardElement.onclick = () => (game = new Game("x"));
+      mainBoardElement.onclick = () => (game = new Game("x", this.aiOn));
       return;
     }
 
@@ -213,4 +215,16 @@ function checkWin(boardState, player) {
 }
 
 // This is how the game is started when the page is loaded
-let game = new Game("x");
+let game = new Game("x", false);
+
+// AI button toggling
+let aiButton = document.getElementById("ai");
+let aiOn = false;
+aiButton.addEventListener("click", (e) => {
+  // Toggle AI mode in game state
+  aiOn = !aiOn;
+  game.aiOn = aiOn;
+  // Animation
+  if (aiOn) aiButton.style.opacity = 1.0;
+  else aiButton.style.opacity = 0.3;
+});

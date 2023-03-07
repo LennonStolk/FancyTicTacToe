@@ -35,15 +35,18 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
 .x-win .cell {
-  outline: 0.35vw solid rgb(101, 109, 164);
+  outline: 0.5vw solid rgb(101, 109, 164);
   transition: ease-in-out 500ms;
 }
 
 .o-win .cell {
-  outline: 0.35vw solid rgb(168, 108, 108);
+  outline: 0.5vw solid rgb(168, 108, 108);
   transition: ease-in-out 500ms;
 }
 
@@ -52,7 +55,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  outline: 0.35vw solid rgb(100, 100, 100);
+  outline: 0.25vw solid rgb(100, 100, 100);
   background-color: rgb(240, 240, 240);
   width: 4vw;
   height: 4vw;
@@ -76,6 +79,10 @@ body {
   border-radius: 0 0 4px 0;
 }
 
-.randomize {
-  margin-top: -7vh;
+.ai {
+  position: absolute;
+  right: 1vw;
+  top: 1vw;
+  opacity: 0.3;
+  transition: ease-in-out 200ms;
 }
