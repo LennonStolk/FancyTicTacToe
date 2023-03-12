@@ -15,6 +15,8 @@ class Game {
     this.optionBoards = getOptionBoards(this.currentBoard, this.currentPlayer);
     this.boardOrigin = document.getElementById("origin");
     this.aiOn = aiOn;
+    this.isWon = false;
+    this.isTied = false;
 
     this.render();
   }
@@ -36,10 +38,10 @@ class Game {
     }, 200);
 
     // If a player has won or has tied, make the main board clickable
-    let hasTied = this.currentBoard.every((cell) => cell != "-");
-    let hasWon =
+    this.isTied = this.currentBoard.every((cell) => cell != "-");
+    this.isWon =
       checkWin(this.currentBoard, "x") || checkWin(this.currentBoard, "o");
-    if (hasWon || hasTied) {
+    if (this.isWon || this.isTied) {
       // Reset the game if the main board is clicked
       mainBoardElement.onclick = () => (game = new Game("x", this.aiOn));
       return;
@@ -64,7 +66,13 @@ class Game {
     });
   }
 
-  optionClicked(id) {
+  optionClicked(id, isAi) {
+    // If the game is over, don't do anything when clicked
+    if (this.isTied || this.isWon) return;
+
+    // Player should not be able to click during AI's turn
+    if (aiOn && this.currentPlayer == "o" && !isAi) return;
+
     let clickedBoardState = id.split("");
     if (clickedBoardState == this.currentBoard) return;
 
@@ -85,6 +93,11 @@ class Game {
     setTimeout(() => {
       this.render();
     }, 500);
+
+    // (Optional) AI choice
+    if (this.aiOn) {
+      this.makeAiMove();
+    }
   }
 
   switchPlayer() {
@@ -97,6 +110,22 @@ class Game {
       this.currentPlayer = "x";
       return;
     }
+  }
+
+  makeAiMove() {
+    if (this.currentPlayer != "o") return;
+
+    // Choose an AI move and select the corresponding board
+    let aiChoice = getAiChoice(this.currentBoard, this.currentPlayer);
+    let choiceBoard = [...this.currentBoard];
+    choiceBoard[aiChoice] = this.currentPlayer;
+    let choiceBoardId = choiceBoard.join("");
+    console.log(choiceBoardId);
+    let choiceBoardElement = document.getElementById(choiceBoardId);
+
+    setTimeout(() => {
+      this.optionClicked(choiceBoardId, true);
+    }, 2000);
   }
 }
 
@@ -129,7 +158,7 @@ function renderBoard(boardState, isOption) {
   board.id = boardState.join("");
   if (isOption) {
     board.style.opacity = 0;
-    board.onclick = (e) => game.optionClicked(board.id);
+    board.onclick = (e) => game.optionClicked(board.id, false);
   }
 
   boardState.forEach((cellState) => {
@@ -214,6 +243,25 @@ function checkWin(boardState, player) {
   return false;
 }
 
+function getAiChoice(boardState, currentPlayer) {
+  if (true) return getRandomChoice(boardState, currentPlayer);
+  else return getMiniMaxChoice(boardState, currentPlayer);
+}
+
+function getRandomChoice(boardState, currentPlayer) {
+  // Example: ["o", "x", "-"] ---> [-1, -1, 2] ---> [2]
+  let emptyCellIndexes = boardState
+    .map((cell, index) => (cell == "-" ? index : -1))
+    .filter((cell) => cell != -1);
+
+  let randomEmptyCellIndex =
+    emptyCellIndexes[Math.floor(Math.random() * emptyCellIndexes.length)];
+
+  return randomEmptyCellIndex;
+}
+
+function getMiniMaxChoice(boardState, currentPlayer) {}
+
 // This is how the game is started when the page is loaded
 let game = new Game("x", false);
 
@@ -227,4 +275,6 @@ aiButton.addEventListener("click", (e) => {
   // Animation
   if (aiOn) aiButton.style.opacity = 1.0;
   else aiButton.style.opacity = 0.3;
+  // Make an AI move if it's the AI's turn
+  if (aiOn) game.makeAiMove();
 });
