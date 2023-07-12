@@ -3,4 +3,4 @@ Dit is een stijlvolle versie van het spel Boter Kaas en Eieren die ik voor de lo
 
 Demo: [Klik hier](https://lennonstolk.nl/projects/tictactoe/index.html)
 
-Afbeelding: ![Afbeelding van het spel](https://lennonstolk.nl/img/projects/tictactoe1.png)
+![Afbeelding van het spel](https://lennonstolk.nl/img/projects/tictactoe1.png)
